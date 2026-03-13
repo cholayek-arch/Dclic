@@ -6,8 +6,13 @@ import 'screens/add_client.dart';
 import 'screens/add_client_male.dart';
 import 'screens/add_client_female.dart';
 import 'screens/welcome_screen.dart';
-
-void main() {
+import'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+Future <void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
