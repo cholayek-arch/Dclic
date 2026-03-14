@@ -2,9 +2,37 @@ import 'dart:convert';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/client.dart';
 import 'storage.dart';
+
+
+
+class FirestoreService {
+  static final FirestoreService _instance = FirestoreService._internal();
+  factory FirestoreService() => _instance;
+  FirestoreService._internal();
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> syncClients(List<Client> clients) async {
+    try{final batch = _firestore.batch();
+    for (var c in clients) {
+      final docRef = _firestore.collection('clients').doc(c.id.toString());
+      batch.set(docRef, {
+        'name': c.name,
+        'gender': c.gender,
+        'measurements': c.measurements,
+        'photos': c.photos,
+        'createdAt': Timestamp.fromDate(c.createdAt),
+      });
+    }
+    await batch.commit();
+  } catch (e) {
+    print('Error syncing clients to Firestore: $e');
+  }
+}}
+
 
 class DbService {
   static final DbService _instance = DbService._internal();
@@ -23,7 +51,7 @@ class DbService {
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE clients(
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             gender TEXT,
             measurements TEXT,
@@ -76,7 +104,7 @@ class DbService {
     await db.insert(
       'clients',
       {
-        'id': c.id,
+        
         'name': c.name,
         'gender': c.gender,
         'measurements': jsonEncode(c.measurements),
