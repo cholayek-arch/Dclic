@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Client {
   final int id;
+  final String? userId; // Propriétaire du client (Premium)
   String name;
   String gender; 
   Map<String, double> measurements;
@@ -11,6 +12,7 @@ class Client {
 
   Client({
     required this.id,
+    this.userId,
     required this.name,
     this.gender = 'male',
     Map<String, double>? measurements,
@@ -23,11 +25,12 @@ class Client {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'userId': userId,
       'name': name,
       'gender': gender,
       'measurements': measurements,
       'photos': photos,
-      'createdAt': createdAt,
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
@@ -36,15 +39,17 @@ class Client {
     final rawPhotos = map['photos'] as List?;
 
     DateTime created;
-
     if (map['createdAt'] is Timestamp) {
       created = (map['createdAt'] as Timestamp).toDate();
-    } else {
+    } else if (map['createdAt'] is String) {
       created = DateTime.parse(map['createdAt']);
+    } else {
+      created = DateTime.now();
     }
 
     return Client(
       id: map['id'] as int,
+      userId: map['userId'] as String?,
       name: map['name'] as String,
       gender: map['gender'] as String? ?? 'male',
       measurements: rawMeasurements != null

@@ -9,13 +9,43 @@ class AppTheme {
       brightness: Brightness.light,
     );
 
+    final emojiFallbacks = [
+      'Segoe UI Emoji', // Windows
+      'Apple Color Emoji', // iOS/macOS
+      'Noto Color Emoji', // Android/Linux
+    ];
+
     final text = GoogleFonts.poppinsTextTheme(base.textTheme).copyWith(
-      displayLarge: base.textTheme.displayLarge?.copyWith(fontSize: 34, fontWeight: FontWeight.w700),
-      headlineMedium: base.textTheme.headlineMedium?.copyWith(fontSize: 24, fontWeight: FontWeight.w700),
-      titleLarge: base.textTheme.titleLarge?.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
-      bodyLarge: base.textTheme.bodyLarge?.copyWith(fontSize: 16, height: 1.4),
-      bodyMedium: base.textTheme.bodyMedium?.copyWith(fontSize: 14, height: 1.3),
-      labelLarge: base.textTheme.labelLarge?.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
+      displayLarge: base.textTheme.displayLarge?.copyWith(
+        fontSize: 34, 
+        fontWeight: FontWeight.w700,
+        fontFamilyFallback: emojiFallbacks,
+      ),
+      headlineMedium: base.textTheme.headlineMedium?.copyWith(
+        fontSize: 24, 
+        fontWeight: FontWeight.w700,
+        fontFamilyFallback: emojiFallbacks,
+      ),
+      titleLarge: base.textTheme.titleLarge?.copyWith(
+        fontSize: 18, 
+        fontWeight: FontWeight.w600,
+        fontFamilyFallback: emojiFallbacks,
+      ),
+      bodyLarge: base.textTheme.bodyLarge?.copyWith(
+        fontSize: 16, 
+        height: 1.4,
+        fontFamilyFallback: emojiFallbacks,
+      ),
+      bodyMedium: base.textTheme.bodyMedium?.copyWith(
+        fontSize: 14, 
+        height: 1.3,
+        fontFamilyFallback: emojiFallbacks,
+      ),
+      labelLarge: base.textTheme.labelLarge?.copyWith(
+        fontSize: 14, 
+        fontWeight: FontWeight.w600,
+        fontFamilyFallback: emojiFallbacks,
+      ),
     );
 
     return base.copyWith(
